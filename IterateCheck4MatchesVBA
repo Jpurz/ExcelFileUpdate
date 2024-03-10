@@ -1,0 +1,42 @@
+Sub checkForRevoked()
+
+
+Application.DisplayAlerts = False
+Application.ScreenUpdating = False
+
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
+
+Dim wb As Workbook
+SoftPath = "W:\2024\SoftySheet.xlsx"
+    Set wb = Workbooks.Open(SoftPath)
+Dim MyRange As Range
+    lastRow = Cells(Cells.Rows.Count, "A").End(xlUp).Row
+    Set MyRange = Range("E1:J" & lastRow)
+'MsgBox (lastRow)
+Dim rwb As Workbook
+Dim rws As Worksheet
+    
+    Dim path As String
+    RevokedPath = "W:\Shared\RevokedCopy.xlsx"
+    Set rwb = Workbooks.Open(RevokedPath)
+    Set rws = rwb.Sheets(1)
+    RevokedLastRow = Cells(Cells.Rows.Count, "C").End(xlUp).Row
+    Set RevokedRange = rws.Range("C2:D" & RevokedLastRow)
+'MsgBox (RevokedLastRow)
+
+For Each i In MyRange
+'    MsgBox (i)
+    For Each r In RevokedRange
+        If LCase(i.Value) Like LCase(r.Value) Then
+            i.Interior.Color = vbYellow
+        End If
+    Next r
+Next
+
+
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
+
+End Sub
+
