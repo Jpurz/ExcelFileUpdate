@@ -1,0 +1,71 @@
+Sub cashIn()
+' This makes a new day sheet and inserts the date.
+' cashIn Macro
+'It will update cell references
+'it will update formulas
+
+Dim sheetName As String
+Dim newName As Integer
+
+oldSheetName = ActiveSheet.Name
+
+newName = CLng(oldSheetName) + 1
+
+'MsgBox newName
+
+
+ActiveSheet.Select
+ActiveSheet.Copy After:=Sheets(CLng(ActiveSheet.Name) + 2)
+ActiveSheet.Name = newName
+    
+Call clearContents
+    
+'Call formulaUpdate   'this sub is not finished yet
+
+Call updateDate
+
+Range("d6").Select
+
+
+End Sub
+
+Sub clearContents()
+
+Range("c6").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.clearContents
+    
+    Range("e6").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.clearContents
+    
+    Range("k6").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.clearContents
+
+End Sub
+
+Sub formulaUpdate()    'this is not active, needs finished
+
+
+    prevsn = "Sheet" & Val(Mid(ActiveSheet.CodeName, 6, (Len(ActiveSheet.CodeName) - 5))) - 1
+    'With Sheets(Prevsn)
+        'oldsheet = .Range(rng)
+    'End With
+
+
+Range("d6").Select
+ActiveCell.Value = Sheets(prevsn)("h6")
+
+
+End Sub
+
+Sub updateDate()
+
+    Range("A3").Select
+    ActiveCell.FormulaR1C1 = "=TODAY()"
+    Range("A3").Select
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues
+
+End Sub
