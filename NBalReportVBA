@@ -1,0 +1,82 @@
+Sub NetBalReport()
+'
+
+Application.ScreenUpdating = False
+Dim wb As Workbook
+If ActiveWorkbook.Name Like "balance2023*" Then
+Set wb = ActiveWorkbook
+Dim rng As Range
+'Set rng = Range("e5").End(xlDown)  'this is to add the cash-in daily total under the sorted data on Cash in worksheet
+
+Dim path As String
+    path = "F:\"    'this is where it will save the IGT file after reworking it, you may need to change this path
+Dim dtToday As String
+    dtToday = Format(Date - 1, "mm-dd-yy")
+           
+
+ActiveSheet.Copy after:=Sheets(Sheets.Count)
+    Rows("1:7").Delete
+    Columns("f:n").Delete
+    Columns("b:c").Delete
+    Sheets(2).Activate
+    
+    [b:c].Select
+With Selection
+    .NumberFormat = "General"
+    .Value = .Value
+End With
+  Range("d1").Value = "=SUM(B1:C1)"
+  
+   
+lastRow = ActiveSheet.Cells(ActiveSheet.Rows.Count, "C").End(xlUp).Row
+'Application.CutCopyMode = False
+Range("d1").Select
+
+Selection.AutoFill Destination:=Range("d1:d" & CStr(lastRow))
+
+Columns("A:A").Select
+    Selection.Replace What:="XXDR-", Replacement:="", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False, FormulaVersion:=xlReplaceFormula2
+    Selection.Replace What:="-", Replacement:="", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False, FormulaVersion:=xlReplaceFormula2
+Columns("d:D").Insert
+Range("d1").Value = "=trim(a1)"
+Range("d1").Select
+
+Selection.AutoFill Destination:=Range("d1:d" & CStr(lastRow))
+
+
+Range("d1:e1").Select
+Range(Selection, Selection.End(xlDown)).Select
+Selection.Copy
+
+Call pasteData  'this will open the cash in workbook and paste
+
+wb.Activate
+ ChDir path
+    ActiveWorkbook.saveAs Filename:= _
+        path & dtToday & " IGT", FileFormat:= _
+        xlOpenXMLWorkbook, CreateBackup:=False
+ wb.Close
+
+
+End If
+
+
+Application.ScreenUpdating = True
+
+
+End Sub
+
+Sub pasteData()
+Dim y As Workbook  'this is for moving over the the Cash in worksheet and pasting the data.
+
+Set y = Workbooks.Open("R:\Shared\2023\Worksheet2023.xlsx")  'this is the permenant path of our cash worksheet. 
+
+y.Sheets(1).Range("h560").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+
+End Sub
+
