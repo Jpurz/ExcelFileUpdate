@@ -1,0 +1,83 @@
+Sub MasterUpdate()
+'this will grab info from the master list and paste in to the test workbook in sheet 2
+'it also swaps column a and b
+'i dont know why but for some reason you may have to run it twice to get the formulas to update,
+'fixed updating issue by cuting columns in the sub
+
+Application.DisplayAlerts = False
+Dim wb As Workbook
+Set wb = ActiveWorkbook
+Dim path As String
+
+Call getFreshMaster
+
+path = "W:\Shared\McMaster.xlsx"
+
+Dim m As Workbook
+Set m = Workbooks.Open(path)
+
+Application.ScreenUpdating = False
+
+m.Sheets(1).Activate
+
+Range("a1").Select
+Selection.CurrentRegion.Select
+Selection.Copy
+
+wb.Activate
+Sheets(2).Activate
+Range("a1").PasteSpecial
+'Columns("b:b").Cut
+'
+'Columns("a:a").Insert
+
+Range("A1").Select
+
+m.Activate
+
+m.Close
+
+wb.Activate
+wb.Sheets(3).Activate
+Application.DisplayAlerts = True
+wb.Save
+
+
+End Sub
+
+Sub getFreshMaster()
+
+dirfile = "Z:\"
+saveFas = "W:\Shared\McMaster.xlsx"
+
+    Dim vaArray     As Variant
+    Dim i           As Integer
+    Dim oFile       As Object
+    Dim oFSO        As Object
+    Dim oFolder     As Object
+    Dim oFiles      As Object
+    Dim y As Workbook
+
+    Set oFSO = CreateObject("Scripting.FileSystemObject")
+    Set oFolder = oFSO.GetFolder(dirfile)
+    Set oFiles = oFolder.Files
+
+    ReDim vaArray(1 To oFiles.Count)
+    i = 1
+    For Each oFile In oFiles
+        vaArray(i) = oFile.Name
+        i = i + 1
+        
+        If oFile.Name Like "Kansas Crossing*" Then
+            Set y = Workbooks.Open(dirfile & oFile.Name, ReadOnly:=True)
+                y.Sheets(1).Activate
+                Columns("b:b").Cut
+                Columns("a:a").Insert
+                   y.saveAs (saveFas)
+                   y.Close
+        End If
+                   
+    Next
+
+
+End Sub
