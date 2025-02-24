@@ -1,4 +1,4 @@
-Sub NetBalReport()
+Sub CashBalReport()
 '
 
 Application.ScreenUpdating = False
@@ -6,10 +6,10 @@ Dim wb As Workbook
 If ActiveWorkbook.Name Like "balance2023*" Then
 Set wb = ActiveWorkbook
 Dim rng As Range
-'Set rng = Range("e5").End(xlDown)  'this is to add the cash-in daily total under the sorted data on Cash in worksheet
+'Set rng = Range("e5").End(xlDown)  'this is to add the daily total under the sorted data in worksheet
 
 Dim path As String
-    path = "F:\"    'this is where it will save the IGT file after reworking it, you may need to change this path
+    path = "F:\"    'this is where it will save the file after reworking it, you may need to change this path
 Dim dtToday As String
     dtToday = Format(Date - 1, "mm-dd-yy")
            
@@ -71,11 +71,11 @@ Application.ScreenUpdating = True
 End Sub
 
 Sub pasteData()
-Dim y As Workbook  'this is for moving over the the Cash in worksheet and pasting the data.
+Dim y As Workbook  'this is for moving over to the worksheet and pasting the data.
 
-Set y = Workbooks.Open("R:\Shared\2023\Worksheet2023.xlsx")  'this is the permenant path of our cash worksheet. 
+Set y = Workbooks.Open("R:\Shared\2023\Worksheet.xlsx")  'this is the permenant path of our cash worksheet. 
 
-y.Sheets(1).Range("h560").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+y.Sheets(1).Range("r160").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
         :=False, Transpose:=False
 
 End Sub
