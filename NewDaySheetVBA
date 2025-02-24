@@ -1,6 +1,4 @@
 Sub cashIn()
-' This makes a new day sheet and inserts the date.
-' cashIn Macro
 'It will update cell references
 'it will update formulas
 
