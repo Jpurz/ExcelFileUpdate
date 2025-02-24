@@ -1,15 +1,13 @@
-Sub MasterUpdate()
-'this will grab info from the master list and paste in to the test workbook in sheet 2
+Sub SheetUpdate()
+'this will grab info from a wb and paste in to the test workbook in sheet 2
 'it also swaps column a and b
-'i dont know why but for some reason you may have to run it twice to get the formulas to update,
-'fixed updating issue by cuting columns in the sub
 
 Application.DisplayAlerts = False
 Dim wb As Workbook
 Set wb = ActiveWorkbook
 Dim path As String
 
-Call getFreshMaster
+Call getFreshData
 
 path = "W:\Shared\McMaster.xlsx"
 
@@ -45,10 +43,10 @@ wb.Save
 
 End Sub
 
-Sub getFreshMaster()
+Sub getFreshData()
 
 dirfile = "Z:\"
-saveFas = "W:\Shared\McMaster.xlsx"
+saveFas = "R:\Shared\McMaster.xlsx"
 
     Dim vaArray     As Variant
     Dim i           As Integer
@@ -68,7 +66,7 @@ saveFas = "W:\Shared\McMaster.xlsx"
         vaArray(i) = oFile.Name
         i = i + 1
         
-        If oFile.Name Like "Kansas Crossing*" Then
+        If oFile.Name Like "fromFile*" Then
             Set y = Workbooks.Open(dirfile & oFile.Name, ReadOnly:=True)
                 y.Sheets(1).Activate
                 Columns("b:b").Cut
